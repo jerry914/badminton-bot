@@ -1,31 +1,38 @@
+
+from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
-from oauth2client.service_account import ServiceAccountCredentials
-import gspread
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import *
 import os
+
+# take environment variables from .env.
 from dotenv import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
-
+load_dotenv()
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
+app = Flask(__name__)
+# line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
+# handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+    return 'OK'
+
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # This function will be called when a message event is received
-    # You'll need to parse the event to determine if it's a new event or a signup
-    # And then call the appropriate function to handle it
+    print(event)
+    message = TextSendMessage(text=event.message.text)
+    line_bot_api.reply_message(event.reply_token, message)
 
-def handle_new_event(event):
-    # This function will be called when a new event is detected
-    # You'll need to add the event to the Google Sheet
-
-def handle_new_signup(event):
-    # This function will be called when a new signup is detected
-    # You'll need to add the signup to the Google Sheet
-
-def add_to_sheet(sheet_name, row):
-    # This function will add a row to a Google Sheet
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-    client = gspread.authorize(creds)
-    sheet = client.open(sheet_name).sheet1
-    sheet.append_row(row)
+import os
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port)
