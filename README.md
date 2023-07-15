@@ -67,7 +67,7 @@ Adds a signup to an event.
 
 Cancels a signup by its unique ID.
 
-### `/videos/<video_type>` (POST)
+### `/videos/<video_type>` (GET)
 
 Sends a random video from the Google Sheet based on the specified video type.
 
