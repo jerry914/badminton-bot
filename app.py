@@ -90,8 +90,11 @@ def cancel_signup(signup_id):
 @app.route('/videos/<video_type>', methods=['post'])
 def send_random_video(video_type):
     video = sheet_handler.send_random_video_from_sheet("VideoList", video_type)
+    print("--------------------")
+    print(video)
+    print(type(video))
 
-    if video:
+    if True:
         return jsonify({'video': video}), 200
     else:
         abort(404)

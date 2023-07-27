@@ -97,6 +97,6 @@ def send_random_video_from_sheet(sheet_name, video_type): # video_type: 可以�
     df = ws_df[ws_df[2] == video_type]
     # Randomly select a row from the dataframe
     random_row = df.sample()[1]
-    return random_row
+    return random_row.values[0]
 
 print(send_random_video_from_sheet("VideoList", "教學"))
