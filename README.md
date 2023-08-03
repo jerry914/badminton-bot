@@ -17,7 +17,7 @@ You will need to have Python 3.6+ and pip installed on your system.
 3. Install the required dependencies using the following command:
 
 ```bash
-pip install Flask flask-ngrok
+pip install Flask
 ```
 
 Make sure to set up the Google Sheets API and include the appropriate credentials file and `client_secret.json` in your directory.
