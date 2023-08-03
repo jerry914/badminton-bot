@@ -6,6 +6,10 @@ import sheet_handler
 
 app = Flask(__name__)
 
+@app.route('/')
+def root():
+    return jsonify({'message': 'Connection successful!'}), 200
+
 @app.route('/events', methods=['GET'])
 def get_future_events():
     # Get the channel_id query parameter
