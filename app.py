@@ -3,7 +3,6 @@ from datetime import datetime
 import uuid
 import os
 import sheet_handler
-from flask_ngrok import run_with_ngrok
 
 app = Flask(__name__)
 
