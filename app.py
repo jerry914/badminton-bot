@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from datetime import datetime
+from datetime import datetime, date
 import uuid
 import os
 import sheet_handler
@@ -40,7 +40,7 @@ def add_event():
     timestamp = datetime.now().isoformat()
 
     # Add the event to the Google Sheet
-    row = [event_id, data['date'], data['time'], data['organizer_id'], data['organizer_name'], data['channel_id'], timestamp]
+    row = [event_id, data['date'], data['time'], data['location'], data['organizer_id'], data['organizer_name'], data['channel_id'], timestamp]
     sheet_handler.add_to_sheet("Events", row)
 
     return jsonify({'event_id': event_id}), 201
