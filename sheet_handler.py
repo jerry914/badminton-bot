@@ -1,9 +1,12 @@
 import pygsheets
 import os
+import sys
 from datetime import date, datetime
 from dateutil.parser import parse
 # take environment variables from .env.
 from dotenv import load_dotenv
+import pandas as pd
+
 load_dotenv()
 sheet_url = os.getenv('SHEET_URL')
 # Initialize Google Sheets API
@@ -109,3 +112,16 @@ def remove_signup_from_sheet(sheet_name, signup_id):
             return f"Deleted signup with id {signup_id}"
 
     return "Signup not found"
+
+def send_random_video_from_sheet(sheet_name, video_type): # video_type: 可以選擇「教學」、「精華」、「shorts」
+    # Select the worksheet by its title
+    ws = sheet.worksheet_by_title("VideoList").get_values(start='A2', end='C', include_empty=False)
+    ws_df = pd.DataFrame(ws).loc[1:, 0:2]
+
+    # Slice the dataframe by video_type
+    df = ws_df[ws_df[2] == video_type]
+    # Randomly select a row from the dataframe
+    random_row = df.sample()[1]
+    return random_row.values[0]
+
+print(send_random_video_from_sheet("VideoList", "教學"))
