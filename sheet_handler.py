@@ -14,7 +14,7 @@ sheet = gc.open_by_url(sheet_url)
 def parse_event_data(event_data):
     # List to store parsed events
     parsed_events = []
-
+    idx = 1
     # Loop through each event in the data
     for event in event_data:
         print(event)
@@ -26,13 +26,13 @@ def parse_event_data(event_data):
         event_id = event[0]
 
         # Create a formatted string for the event
-        parsed_event = f'Date: {date}, Time: {time}, Location: {location}, Host: {host}, Event ID: {event_id}'
-
+        parsed_event = f'{idx}. Date: {date}, Time: {time}, Location: {location}'
+        
         # Add the parsed event to the list
         parsed_events.append(parsed_event)
-
+        idx+=1
     # Combine the parsed events into a single string
-    parsed_events_str = "\n".join(parsed_events)
+    parsed_events_str = "\n\n".join(parsed_events)
 
     return parsed_events_str
 def add_to_sheet(sheet_name, row):
