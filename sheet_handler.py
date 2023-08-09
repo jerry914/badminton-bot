@@ -10,7 +10,7 @@ import pandas as pd
 load_dotenv()
 sheet_url = os.getenv('SHEET_URL')
 # Initialize Google Sheets API
-gc = pygsheets.authorize(service_file='client_secret.json')
+gc = pygsheets.authorize(service_account_json=os.getenv('CLIENT_SECRET_JSON'))
 sheet = gc.open_by_url(sheet_url)
 
 
