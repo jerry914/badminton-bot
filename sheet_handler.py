@@ -1,6 +1,7 @@
 import pygsheets
 import os
 from datetime import date, datetime
+from dateutil.parser import parse
 # take environment variables from .env.
 from dotenv import load_dotenv
 load_dotenv()
@@ -25,12 +26,11 @@ def fetch_future_events_from_sheet(sheet_name, channel_id, date):
         if all(cell == '' for cell in row):
             continue
         try:
-            row_date = datetime.strptime(row[1], '%Y-%m-%d').date()
-        except ValueError:
-            print(f"Skipping row with invalid date: {row}")
-            if row[5] == channel_id:
-                future_events.append(row)
-            continue
+            # Attempt to parse the date
+            row_date = parse(row[1], fuzzy=True).date()
+            # row_date = parsed_date.strftime('%Y-%m-%d')
+        except:
+            print(f"Could not parse date: {row[1]}")
 
         if row[5] == channel_id and row_date >= date:
             future_events.append(row)
