@@ -4,10 +4,10 @@ import sys
 from datetime import date, datetime
 from dateutil.parser import parse
 # take environment variables from .env.
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import pandas as pd
 
-load_dotenv()
+# load_dotenv()
 sheet_url = os.getenv('SHEET_URL')
 # Initialize Google Sheets API
 gc = pygsheets.authorize(service_account_json=os.getenv('CLIENT_SECRET_JSON'))
