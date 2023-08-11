@@ -90,6 +90,14 @@ def cancel_signup(signup_id):
     else:
         abort(404)
 
+@app.route('/videos/<video_type>', methods=['get'])
+def send_random_video(video_type):
+    video = sheet_handler.send_random_video_from_sheet("VideoList", video_type)
+
+    if True:
+        return jsonify({'video': video}), 200
+    else:
+        abort(404)
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port)

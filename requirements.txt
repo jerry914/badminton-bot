@@ -1,2 +1,5 @@
 Flask
 pygsheets
+gunicorn==21.2.0
+python-dateutil
+pandas
