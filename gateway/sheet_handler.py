@@ -13,12 +13,11 @@ sheet_url = os.getenv('SHEET_URL')
 gc = pygsheets.authorize(service_account_json=os.getenv('CLIENT_SECRET_JSON'))
 sheet = gc.open_by_url(sheet_url)
 
-
 def parse_event_data(event_data):
     # List to store parsed events
     parsed_events = []
     idx = 1
-    # Loop through each event in the data
+    # Loop through the events
     for event in event_data:
         print(event)
         # Extract the other fields
@@ -53,16 +52,12 @@ def fetch_future_events_from_sheet(sheet_name, channel_id, date):
         # Skip the row if it's completely empty
         if all(cell == '' for cell in row):
             continue
-        row_date = '2022-01-01'
         try:
-            # Attempt to parse the date
-            row_date = parse(row[1], fuzzy=True).date()
-            # row_date = parsed_date.strftime('%Y-%m-%d')
+            row_date =  datetime.strptime(row[1], "%Y/%m/%d").date()
+            if row_date >= date:
+                future_events.append(row)
         except:
             print(f"Could not parse date: {row[1]}")
-        if row[6] == channel_id and row_date >= date:
-            future_events.append(row)
-
     return parse_event_data(future_events)
 def fetch_participants_by_id(sheet_name, event_id):
     # Select the worksheet by its title
@@ -78,7 +73,7 @@ def fetch_participants_by_id(sheet_name, event_id):
         if all(cell == '' for cell in row):
             continue
         # Check if the event_id matches the one we're looking for
-        if row[1] == event_id:  # Assuming event_id is in the second column
+        if row[1] == event_id:  # Event_id is in the second column
             participants.append(row)
 
     return participants
@@ -92,7 +87,7 @@ def remove_event_from_sheet(sheet_name, event_id):
 
     # Find the row with the specified event_id
     for i, row in enumerate(rows):
-        if row[0] == event_id:  # Assuming event_id is in the first column
+        if row[0] == event_id:  # Event_id is in the first column
             ws.delete_rows(i+1)  # delete_rows() uses 1-based indexing
             return f"Deleted event with id {event_id}"
 
@@ -107,7 +102,7 @@ def remove_signup_from_sheet(sheet_name, signup_id):
 
     # Find the row with the specified signup_id
     for i, row in enumerate(rows):
-        if row[0] == signup_id:  # Assuming signup_id is in the first column
+        if row[0] == signup_id:  # Signup_id is in the first column
             ws.delete_rows(i+1)  # delete_rows() uses 1-based indexing
             return f"Deleted signup with id {signup_id}"
 
@@ -119,9 +114,12 @@ def send_random_video_from_sheet(sheet_name, video_type): # video_type: 可以�
     ws_df = pd.DataFrame(ws).loc[1:, 0:2]
 
     # Slice the dataframe by video_type
-    df = ws_df[ws_df[2] == video_type]
-    # Randomly select a row from the dataframe
-    random_row = df.sample()[1]
-    return random_row.values[0]
+    try:
+        df = ws_df[ws_df[2] == video_type]
+        # Randomly select a row from the dataframe
+        random_row = df.sample()[1]
+        return random_row.values[0]
+    except:
+        return "https://youtu.be/YzyEPCEIkcE"
+    
 
-print(send_random_video_from_sheet("VideoList", "教學"))
