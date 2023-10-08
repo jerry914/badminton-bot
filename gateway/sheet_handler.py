@@ -107,7 +107,6 @@ def remove_signup_from_sheet(sheet_name, signup_id):
             return f"Deleted signup with id {signup_id}"
 
     return "Signup not found"
-
 def send_random_video_from_sheet(sheet_name, video_type): # video_type: 可以選擇「教學」、「精華」、「shorts」
     # Select the worksheet by its title
     ws = sheet.worksheet_by_title("VideoList").get_values(start='A2', end='C', include_empty=False)
@@ -121,5 +120,3 @@ def send_random_video_from_sheet(sheet_name, video_type): # video_type: 可以�
         return random_row.values[0]
     except:
         return "https://youtu.be/YzyEPCEIkcE"
-    
-
