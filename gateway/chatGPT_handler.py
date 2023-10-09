@@ -193,5 +193,7 @@ def run_conversation(user_message):
             messages=messages,
         )  # get a new response from GPT where it can see the function response
         return second_response["choices"][0]["message"]["content"]
+    else:
+        return response_message["content"]
 
 # print(run_conversation("Cancle the signup of cbef28a4-b676-4e62-9cb3-97f5bfc03483"))
