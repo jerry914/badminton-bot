@@ -37,6 +37,7 @@ ngrok http 5001
 
 ## Endpoints
 
+** The routes have been deprecated and are now substituted by the function located in `/gateway/chatGPT_handler` **
 ### `/events` (GET)
 
 Retrieves all future events for a specific channel ID.
@@ -70,6 +71,10 @@ Cancels a signup by its unique ID.
 ### `/videos/<video_type>` (GET)
 
 Sends a random video from the Google Sheet based on the specified video type.
+
+## Next Action
+- [ ] Finetune the GPT onversation
+- [ ] Rewrite README.md 
 
 ## Contributing
 
